@@ -3,7 +3,7 @@ from flask import Flask, jsonify
 
 import datetime as dt
 import numpy as np
-import sqlalchemy
+#import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func, inspect,desc
@@ -66,19 +66,19 @@ def tobs():
     session.close()
 
 @app.route("/api/v1.0/start")
-def start_end():
-    session = Session(engine)
-    start= session.query(func.max(measurement.tobs),func.min(measurement.tobs),func.avg(measurement.tobs).filter(measurement.date >= 'start_date')).all()
-    start2= list(np.ravel(start))
-    return jsonify(start2)
+def start():
+     session = Session(engine)
+     start= session.query(func.max(Measurement.tobs),func.min(Measurement.tobs),func.avg(Measurement.tobs).filter(Measurement.date >= 'start_date')).all()
+     start2= list(np.ravel(start))
+     return jsonify(start2)
 
 @app.route("/api/v1.0/start/end")
 def start_end():
-    session = Session(engine)
-    start_end= session.query(func.max(Measurement.tobs),func.min(Measurement.tobs),func.avg(Measurement.tobs).filter(Measurement.date <= 'start_and _end_date')).all()
-    tobs_list2= list(np.ravel(tobs_list))
-    return jsonify(tobs_list2)
-    session.close()
+     session = Session(engine)
+     start_end= session.query(func.max(Measurement.tobs),func.min(Measurement.tobs),func.avg(Measurement.tobs).filter(Measurement.date <= 'start_and _end_date')).all()
+     start_end2= list(np.ravel(start_end))
+     return jsonify(start_end2)
+     session.close()
 
 if __name__ == "__main__":
     app.run(debug=True)
