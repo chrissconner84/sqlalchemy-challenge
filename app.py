@@ -28,8 +28,9 @@ def welcome():
         f"/api/v1.0/percipitation<br/>"
         f"/api/v1.0/stations<br/>"
         f"/api/v1.0/tobs<br/>"
-        f"/api/v1.0/start<br/>"
-        f"/api/v1.0/start/end"
+        f"/api/v1.0/start -- Please enter start date in yyyy-mm-dd format within quotes<br/>"
+        f"/api/v1.0/start/end -- Please enter starte date in yyy-mm-dd format within quotes followed by \ then enter end date\
+        in yyy-mm-dd format within quotes"
     )
 
 
@@ -65,19 +66,19 @@ def tobs():
     return jsonify(tobs_list2)
     session.close()
 
-@app.route("/api/v1.0/start")
-def start():
+@app.route("/api/v1.0/<sd>")
+def start(sd):
      session = Session(engine)
-     start= session.query(func.max(Measurement.tobs),func.min(Measurement.tobs),func.avg(Measurement.tobs).filter(Measurement.date >= 'start_date')).all()
-     start2= list(np.ravel(start))
-     return jsonify(start2)
+     st= session.query(func.max(Measurement.tobs),func.min(Measurement.tobs),func.avg(Measurement.tobs).filter(Measurement.date >=sd)).all()
+     st2= list(np.ravel(st))
+     return jsonify(st2)
 
-@app.route("/api/v1.0/start/end")
-def start_end():
+@app.route("/api/v1.0/<sd>/<ed>")
+def start_end(sd,ed):
      session = Session(engine)
-     start_end= session.query(func.max(Measurement.tobs),func.min(Measurement.tobs),func.avg(Measurement.tobs).filter(Measurement.date <= 'start_and _end_date')).all()
-     start_end2= list(np.ravel(start_end))
-     return jsonify(start_end2)
+     se= session.query(func.max(Measurement.tobs),func.min(Measurement.tobs),func.avg(Measurement.tobs).filter(Measurement.date >= sd).filter(Measurement.date <= ed)).all()
+     se2= list(np.ravel(se))
+     return jsonify(se2)
      session.close()
 
 if __name__ == "__main__":
